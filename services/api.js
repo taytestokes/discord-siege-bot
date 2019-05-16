@@ -28,14 +28,20 @@ const getRank = (username, receivedMessage) => {
     .then(playerInfo => {
       //infomormation about the user is now stored in playerInfo.data
       console.log(playerInfo.data);
+      //transform the kd into a decimal value
+      const kdRating = JSON.stringify(playerInfo.data.kd).split('').map((num, index) => index === 0 ? num += '.' : num).join('');
       //create an embeded object to send as a styled message
       const embed = new Discord.RichEmbed()
         .setTitle(`Seasonal rank stats for: ${playerInfo.data.p_name}`)
         .setAuthor(`Player: ${playerInfo.data.p_name}`)
         .setColor(rankColorChecker(playerInfo.data.p_currentmmr))
         .setTimestamp()
-        .setFooter("Thank you for using my siege discord bot");
-
+        .setFooter("Thank you for using my siege discord bot")
+        .setThumbnail(rankChecker(playerInfo.data.p_currentmmr))
+        .addField('Current NA MMR:', `${playerInfo.data.p_NA_currentmmr}`, true)
+        .addField('Current EU MMR:', `${playerInfo.data.p_EU_currentmmr}`, true)
+        .addField('Current AS MMR:', `${playerInfo.data.p_AS_currentmmr}`, true)
+        .addField('Max MMR:', `${playerInfo.data.p_maxmmr}`);
       //send the response from the bot
       receivedMessage.channel.send({ embed });
     });
