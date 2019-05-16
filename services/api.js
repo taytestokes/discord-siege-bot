@@ -74,10 +74,18 @@ const getStats = (username, receivedMessage) => {
       // create an embeded message to send in discord
       const embed = new Discord.RichEmbed()
         .setTitle(`Seasonal stats for: ${playerInfo.data.p_name}`)
-        .setAuthor(`Player:`, `${playerInfo.data.p_name}`)
+        .setAuthor(`Player: ${playerInfo.data.p_name}`)
         .setColor(rankColorChecker(playerInfo.data.p_currentmmr))
         .setTimestamp()
         .setFooter("Thank you for using my siege discord bot")
+        .addField('Platform:', `${playerInfo.data.p_platform}`, true)
+        .addField('Level:', `${playerInfo.data.p_level}`, true)
+        .addField('Skill Rating:', `${playerInfo.data.p_skillrating}`, true)
+        .addField('Total Games Played:', ` ${playerInfo.data.seasonal.total_rankedtotal}`, true)
+        .addField('Ranked Wins:', `${playerInfo.data.seasonal.total_rankedwins}`, true)
+        .addField('Ranked Losses:', `${playerInfo.data.seasonal.total_rankedlosses}`, true)
+      // send a message back from the bot
+      receivedMessage.channel.send({embed});  
     });
 };
 
