@@ -4,26 +4,30 @@ const client = new Discord.Client();
 const { baseURL, playerBaseURL } = require("../config/api");
 
 // Rank Images
-const copperFour = 'https://i.imgur.com/deTjm7V.png';
-const copperThree = 'https://i.imgur.com/zx5KbBO.png';
-const copperTwo = 'https://i.imgur.com/RTCvQDV.png';
-const copperOne = 'https://i.imgur.com/SN55IoP.png';
+const {
+    copperFour,
+    copperThree,
+    copperTwo,
+    copperOne,
+    bronzeFour,
+    bronzeThree,
+    bronzeTwo,
+    bronzeOne,
+    silverFour,
+    silverThree,
+    silverTwo,
+    silverOne,
+    goldFour,
+    goldThree,
+    goldTwo,
+    goldOne,
+    platThree,
+    platTwo,
+    platOne,
+    diamond
+} = require('../assets/rank_icons');
 
-const bronzeFour = 'https://i.imgur.com/DmfZeRP.png';
-const bronzeThree = 'https://i.imgur.com/QOuIDW4.png';
-const bronzeTwo = 'https://i.imgur.com/ry1KwLe.png';
-const bronzeOne = 'https://i.imgur.com/64eQSbG.png';
-
-const silverFour = 'https://i.imgur.com/fOmokW9.png';
-const silverThree = 'https://i.imgur.com/e84XmHl.png';
-const silverTwo = 'https://i.imgur.com/f68iB99.png';
-const silverOne = 'https://i.imgur.com/iQGr0yz.png';
-
-const goldFour = 'https://i.imgur.com/DelhMBP.png';
-const goldThree = 'https://i.imgur.com/5fYa6cM.png';
-
-
-//Service Function
+// Get Player Rank Iformation
 const getRank = (username, receivedMessage) => {
     //make sure a username is entered
     if(!username) receivedMessage.channel.send('Please enter a user to rank search');
