@@ -45,10 +45,12 @@ const getRank = (username, receivedMessage) => {
         .then(playerInfo => {
             //infomormation about the user is now stored in playerInfo.data
             console.log(playerInfo.data)
+            console.log(client)
             //create an embeded object to send as a styled message
             const embed = new Discord.RichEmbed()
                 .setTitle(`Seasonal Rank Stats for ${playerInfo.data.p_name}`)
-                .setAuthor(`Siege Bot`, ``)
+                .setAuthor(`Siege Bot`)
+                
             
             //send the response from the bot
             receivedMessage.channel.send({embed});
