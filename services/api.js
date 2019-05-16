@@ -27,6 +27,36 @@ const {
     diamond
 } = require('../assets/rank_icons');
 
+// Rank Colors
+const {
+    copperColor,
+    bronzeColor,
+    silverColor,
+    goldColor,
+    platColor,
+    diamondColor
+} = require('../assets/rank_colors');
+
+// Rank Color Checker
+const rankColorChecker = ({ p_currentmmr }) => {
+    //check for the players current mmr to return the rank color
+    switch(p_currentmmr){
+        case p_currentmmr < 1700:
+            return copperColor;
+        case p_currentmmr < 2099 && p_currentmmr > 1699:
+            return bronzeColor;
+        case p_currentmmr < 2499 && p_currentmmr > 2098:
+            return silverColor;
+        case p_currentmmr < 3299 && p_currentmmr > 2498:
+            return goldColor;
+        case p_currentmmr < 4500 && p_currentmmr > 3298:
+            return platColor;
+        default:
+            return diamondColor;
+    };
+};
+
+
 // Get Player Rank Iformation
 const getRank = (username, receivedMessage) => {
     //make sure a username is entered
@@ -34,7 +64,6 @@ const getRank = (username, receivedMessage) => {
     //make a request to tabwire api to find the player
     axios.get(`${baseURL}?platform=uplay&search=${username}`)
         .then(response => {
-            console.log(response.data)
             //check to see if there aren't any matches
             if(response.data.results === 0) receivedMessage.channel.send(`Player ${username} doesn't exists, please try again.`);
             //filter for the correct user
@@ -45,12 +74,11 @@ const getRank = (username, receivedMessage) => {
         .then(playerInfo => {
             //infomormation about the user is now stored in playerInfo.data
             console.log(playerInfo.data)
-            console.log(client)
             //create an embeded object to send as a styled message
             const embed = new Discord.RichEmbed()
-                .setTitle(`Seasonal Rank Stats for ${playerInfo.data.p_name}`)
-                .setAuthor(`Siege Bot`)
-                
+                .setTitle(`Seasonal rank stats for: ${playerInfo.data.p_name}`)
+                .setAuthor(`Player: ${playerInfo.data.p_name}`)
+                .setColor()
             
             //send the response from the bot
             receivedMessage.channel.send({embed});
