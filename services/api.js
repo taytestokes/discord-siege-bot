@@ -84,6 +84,9 @@ const getStats = (username, receivedMessage) => {
         .addField('Total Games Played:', ` ${playerInfo.data.seasonal.total_rankedtotal}`, true)
         .addField('Ranked Wins:', `${playerInfo.data.seasonal.total_rankedwins}`, true)
         .addField('Ranked Losses:', `${playerInfo.data.seasonal.total_rankedlosses}`, true)
+        .addField('Total Ranked Kills:', `${playerInfo.data.seasonal.total_rankedkills}`, true)
+        .addField('Total Ranked Deaths:', `${playerInfo.data.seasonal.total_rankeddeaths}`, true)
+        .addField('KD Ratio:', `${kdRating}`, true)
       // send a message back from the bot
       receivedMessage.channel.send({embed});  
     });
