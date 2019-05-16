@@ -4,7 +4,7 @@ const { baseURL, playerBaseURL } = require("../config/api");
 const { rankColorChecker } = require("./checkers/color_checker");
 const { rankChecker } = require("./checkers/rank_checker");
 
-// Get Player Rank Iformation
+// Get Player Rank Information
 const getRank = (username, receivedMessage) => {
   //make sure a username is entered
   if (!username)
@@ -28,25 +28,60 @@ const getRank = (username, receivedMessage) => {
     .then(playerInfo => {
       //infomormation about the user is now stored in playerInfo.data
       console.log(playerInfo.data);
-      //transform the kd into a decimal value
-      const kdRating = JSON.stringify(playerInfo.data.kd).split('').map((num, index) => index === 0 ? num += '.' : num).join('');
       //create an embeded object to send as a styled message
       const embed = new Discord.RichEmbed()
-        .setTitle(`Seasonal rank stats for: ${playerInfo.data.p_name}`)
+        .setTitle(`Seasonal rank for: ${playerInfo.data.p_name}`)
         .setAuthor(`Player: ${playerInfo.data.p_name}`)
         .setColor(rankColorChecker(playerInfo.data.p_currentmmr))
         .setTimestamp()
         .setFooter("Thank you for using my siege discord bot")
         .setThumbnail(rankChecker(playerInfo.data.p_currentmmr))
-        .addField('Current NA MMR:', `${playerInfo.data.p_NA_currentmmr}`, true)
-        .addField('Current EU MMR:', `${playerInfo.data.p_EU_currentmmr}`, true)
-        .addField('Current AS MMR:', `${playerInfo.data.p_AS_currentmmr}`, true)
-        .addField('Max MMR:', `${playerInfo.data.p_maxmmr}`);
+        .addField("Current NA MMR:", `${playerInfo.data.p_NA_currentmmr}`, true)
+        .addField("Current EU MMR:", `${playerInfo.data.p_EU_currentmmr}`, true)
+        .addField("Current AS MMR:", `${playerInfo.data.p_AS_currentmmr}`, true)
+        .addField("Max MMR:", `${playerInfo.data.p_maxmmr}`);
       //send the response from the bot
       receivedMessage.channel.send({ embed });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+// Get Player Stats Information
+const getStats = (username, receivedMessage) => {
+  // make user name exists
+  if (!username) return "ERROR: user does not exist";
+  // make a request to tabwire to get the players statistics
+  axios
+    .get(`${baseURL}?platform=uplay&search=${username}`)
+    .then(response => {
+      //filter through the results to only receive the player
+      const player = response.data.results.filter(user => {
+        if (user.p_name == username) {
+          return user;
+        }
+      });
+      // make another call to get more information about the player
+      return axios.get(`${playerBaseURL}?p_id=${player[0].p_id}`);
+    })
+    .then(playerInfo => {
+      //transform the kd into a decimal value
+      const kdRating = JSON.stringify(playerInfo.data.kd)
+        .split("")
+        .map((num, index) => (index === 0 ? (num += ".") : num))
+        .join("");
+      // create an embeded message to send in discord
+      const embed = new Discord.RichEmbed()
+        .setTitle(`Seasonal stats for: ${playerInfo.data.p_name}`)
+        .setAuthor(`Player:`, `${playerInfo.data.p_name}`)
+        .setColor(rankColorChecker(playerInfo.data.p_currentmmr))
+        .setTimestamp()
+        .setFooter("Thank you for using my siege discord bot")
     });
 };
 
 module.exports = {
-  getRank
+  getRank,
+  getStats
 };

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const { token } = require("./config/token");
-const { getRank } = require("./services/api");
+const { getRank, getStats } = require("./services/api");
 
 //On Connection
 client.on("ready", () => {
@@ -32,11 +32,12 @@ function proccessCommand(receivedMessage) {
 
   //check for the command
   if (primary == "rank") {
-      getRank(arguments[0], receivedMessage);
-  }else {
-      receivedMessage.channel.send('Please try using the command "rank"');
+    getRank(arguments[0], receivedMessage);
+  } else if (primary == "stats") {
+      getStats(arguments[0], receivedMessage);
+  } else {
+    receivedMessage.channel.send('Please try using the command "rank"');
   }
-
 }
 
 // Login to the bot using the token
