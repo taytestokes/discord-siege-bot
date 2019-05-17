@@ -44,7 +44,7 @@ const getRank = (username, receivedMessage) => {
       receivedMessage.channel.send({ embed });
     })
     .catch(error => {
-      console.log(error);
+      if (error) throw error;
     });
 };
 
